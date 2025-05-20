@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Тест по химии (10 класс)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+    }
+    .question {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+    }
+    select {
+      margin-left: 10px;
+      padding: 3px 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: white;
+      outline: none;
+      box-shadow: none;
+      transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    }
+    select.correct-answer,
+    select.wrong-answer {
+      outline: none;
+      box-shadow: none;
+      border-width: 2px;
+    }
+    select.correct-answer {
+      background-color: #d4edda; /* светло-зеленый фон */
+      border-color: #155724; /* темно-зеленая рамка */
+      color: #155724; /* темно-зеленый текст */
+    }
+    select.wrong-answer {
+      background-color: #f8d7da; /* светло-красный фон */
+      border-color: #721c24; /* темно-красная рамка */
+      color: #721c24; /* темно-красный текст */
+    }
+    /* Чтобы убрать красную рамку при фокусе */
+    select:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    /* Подсветка для вариантов ответов */
+    .correct-answer {
+      background-color: #d4edda; /* светло-зеленый фон */
+      color: #155724; /* тёмно-зеленый текст */
+    }
+    .wrong-answer {
+      background-color: #f8d7da; /* светло-красный фон */
+      color: #721c24; /* тёмно-красный текст */
+    }
+  </style>
+</head>
+<body>
+  <h1>Тест по химии — 10 класс (Билеты)</h1>
+  <div id="test"></div>
+  <button onclick="checkAnswers()">Проверить ответы</button>
+  <div id="result"></div>
+
+  <script>
+    const questions = [
+      {
+        question: "1. Установите соответствие между названием вещества  и классом (группой) органических соединений, к которому оно принадлежит",
+        type: "match",
+        items: ["А) глицерин", "Б) глицин", "В) бутанол-1", "Г) толуол"],
+        matches: ["1) альдегиды", "2) аминокислоты", "3) простые эфиры", "4) спирты", "5) углеводороды", "6) углеводы"],
+        correct: [3, 1, 4, 5]
+      },
+      {
+        question: "2. Изомером бутанола-1 является ",
+        type: "single",
+        options: [
+          "1) CH₃(CH₂)₃CH₂OH",
+          "2) CH₃CH(OH)CH₂CH₃",
+          "3) CH₃-O-CH₂CH₃",
+          "4) CH₃CH₂CH₂CHO"
+        ],
+        correct: 1
+      },
+      {
+        question: "3. Изомером диэтилового эфира является",
+        type: "single",
+        options: [
+          "1) две σ-связи",
+          "2) одну σ-связь",
+          "3) одну σ- и одну π-связь",
+          "4) две π-связи"
+        ],
+        correct: 0
+      },
+      {
+        question: "4. В схемах превращения C6H6  → X → C6H5OH веществом X является",
+        type: "single",
+        options: ["1) ) C6H5-CH3 ", "2) C6H5-COOH", "3) C6H5Cl", "4) C6H5-CHO"],
+        correct: 2
+      },
+      {
+        question: "5. Уксусная кислота реагирует с каждым из двух веществ ",
+        type: "single",
+        options: ["1) гидроксид цинка и сульфат бария", "2) натрий и карбонат натрия", "3) хлор и медь", "4) оксид железа (III) 
+и нитрат серебра
+"],
+        correct: 1
+      },
+      {
+        question: "6. Этилен можно получить из этанола",
+        type: "single",
+        options: ["1) дегидратацией при t°>140°", "2) дегидратацией при t°<140°", "3) взаимодействием с хлороводородом", "4) взаимодействием с этановой кислотой"],
+        correct: 0
+      },
+      {
+        question: "7. Этанол и глицерин можно распознать",
+        type: "single",
+        options: ["1) гидроксидом меди (II)", "2) натрием", "3) муравьиной кислотой", "4) карбонатом кальция"],
+        correct: 0
+      },
+      {
+        question: "8. Для бутина-1 справедливы утверждения",
+        type: "multiple",
+        options: [
+          "1) молекула содержит одну π-связь",
+          "2) вступает в реакции галогенирования",
+          "3) обесцвечивает раствор перманганата калия",
+          "4) все атомы углерода находятся в состояние sp² – гибридизации",
+          "5) является изомером бутадиена-1,3",
+          "6) при гидратации в присутствии солей ртути (II) образует бутанол-1"
+        ],
+        correct: [1, 2, 4]  //
+      }
+    ];
+
+    const testDiv = document.getElementById("test");
+
+    questions.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      if (q.type === "match") {
+        let html = `<strong>${q.question}</strong><br><br>`;
+        q.items.forEach((item, idx) => {
+          html += `<label>${item}</label>`;
+          html += `<select id="match-${i}-${idx}">`;
+          html += `<option value="">-- Выберите формулу --</option>`;
+          q.matches.forEach((match, mIdx) => {
+            html += `<option value="${mIdx}">${match}</option>`;
+          });
+          html += `</select><br><br>`;
+        });
+        div.innerHTML = html;
+      } else if (q.type === "single") {
+        div.innerHTML = `<strong>${q.question}</strong><br>` +
+          q.options.map((opt, j) => `
+            <label><input type="radio" name="q${i}" value="${j}"> ${opt}</label><br>
+          `).join("");
+      } else if (q.type === "multiple") {
+        div.innerHTML = `<strong>${q.question}</strong><br>` +
+          q.options.map((opt, j) => `
+            <label><input type="checkbox" name="q${i}" value="${j}"> ${opt}</label><br>
+          `).join("");
+      }
+      testDiv.appendChild(div);
+    });
+
+    function checkAnswers() {
+      let correctCount = 0;
+
+      questions.forEach((q, i) => {
+        if (q.type === "match") {
+          let allCorrect = true;
+          for (let idx = 0; idx < q.items.length; idx++) {
+            const select = document.getElementById(`match-${i}-${idx}`);
+            select.classList.remove("correct-answer", "wrong-answer");
+
+            if (!select.value) {
+              select.classList.add("wrong-answer");
+              allCorrect = false;
+            } else if (parseInt(select.value) === q.correct[idx]) {
+              select.classList.add("correct-answer");
+            } else {
+              select.classList.add("wrong-answer");
+              allCorrect = false;
+            }
+          }
+          if (allCorrect) correctCount++;
+        } else if (q.type === "single") {
+          const selected = document.querySelector(`input[name=q${i}]:checked`);
+          const inputs = document.querySelectorAll(`input[name=q${i}]`);
+          inputs.forEach(input => {
+            input.parentElement.classList.remove("correct-answer", "wrong-answer");
+          });
+
+          if (selected) {
+            if (parseInt(selected.value) === q.correct) {
+              selected.parentElement.classList.add("correct-answer");
+              correctCount++;
+            } else {
+              selected.parentElement.classList.add("wrong-answer");
+              const correctInput = document.querySelector(`input[name=q${i}][value="${q.correct}"]`);
+              if (correctInput) {
+                correctInput.parentElement.classList.add("correct-answer");
+              }
+            }
+          }
+        } else if (q.type === "multiple") {
+          // Получаем все выбранные чекбоксы для этого вопроса
+          const checked = Array.from(document.querySelectorAll(`input[name=q${i}]:checked`)).map(input => parseInt(input.value));
+          const correctSet = new Set(q.correct);
+          const checkedSet = new Set(checked);
+
+          // Подсветка: сначала убираем
+          const allInputs = document.querySelectorAll(`input[name=q${i}]`);
+          allInputs.forEach(input => {
+            input.parentElement.classList.remove("correct-answer", "wrong-answer");
+          });
+
+          // Подсветка правильных ответов зелёным
+          allInputs.forEach(input => {
+            const val = parseInt(input.value);
+            if (correctSet.has(val)) {
+              input.parentElement.classList.add("correct-answer");
+            }
+          });
+
+          // Подсветка неправильных выбранных красным
+          checked.forEach(val => {
+            if (!correctSet.has(val)) {
+              const input = document.querySelector(`input[name=q${i}][value="${val}"]`);
+              if (input) {
+                input.parentElement.classList.add("wrong-answer");
+              }
+            }
+          });
+
+          // Проверяем, что выбран ровно правильный набор ответов
+          const isCorrect = checked.length === q.correct.length && checked.every(val => correctSet.has(val));
+          if (isCorrect) correctCount++;
+        }
+      });
+
+      document.getElementById("result").innerText = `Правильных ответов: ${correctCount} из ${questions.length}`;
+    }
+  </script>
+</body>
+</html>
